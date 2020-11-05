@@ -8,6 +8,8 @@ class ScreenPaths {
   static const screenC = '/screenC';
 }
 
+//////////////////////////////////////////////// `Route observer`
+///
 class AppRouter extends NavigatorObserver {
   static Map<String, GetPageRoute> navStack = {};
 
@@ -28,6 +30,8 @@ class AppRouter extends NavigatorObserver {
       case ScreenPaths.screenC:
         routePage = ScreenC();
         break;
+
+      /// Default route, can be use to redirect to `Page not found` screen when wrong path is provided.
       default:
         routePage = Home();
     }
@@ -38,9 +42,13 @@ class AppRouter extends NavigatorObserver {
       page: () => routePage,
     );
 
+    /// check if the route already exists on `navStack`.
     if (navStack[routeName] != null) {
+      /// remove if it exists.
       navigator.removeRoute(navStack[routeName]);
     }
+
+    /// add to `navStack`
     navStack[routeName] = route;
 
     return route;
@@ -53,20 +61,26 @@ class AppRouter extends NavigatorObserver {
   }
 }
 
+//////////////////////////////////////////////// `App`
+///
 class RouterApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        initialRoute: ScreenPaths.home,
-        onGenerateRoute: AppRouter.generate);
+      title: 'Flutter Demo',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+        visualDensity: VisualDensity.adaptivePlatformDensity,
+      ),
+      initialRoute: ScreenPaths.home,
+      onGenerateRoute: AppRouter.generate,
+      navigatorObservers: [AppRouter()],
+    );
   }
 }
 
+//////////////////////////////////////////////// `SCREENS`
+///
 class Home extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -116,12 +130,6 @@ class ScreenA extends StatelessWidget {
           children: [
             RaisedButton(
               onPressed: () {
-                Get.toNamed(ScreenPaths.home);
-              },
-              child: Text('Go to Home'),
-            ),
-            RaisedButton(
-              onPressed: () {
                 Get.toNamed(ScreenPaths.screenB);
               },
               child: Text('Go to Screen B'),
@@ -152,12 +160,6 @@ class ScreenB extends StatelessWidget {
           children: [
             RaisedButton(
               onPressed: () {
-                Get.toNamed(ScreenPaths.home);
-              },
-              child: Text('Go to Home'),
-            ),
-            RaisedButton(
-              onPressed: () {
                 Get.toNamed(ScreenPaths.screenA);
               },
               child: Text('Go to Screen A'),
@@ -186,12 +188,6 @@ class ScreenC extends StatelessWidget {
       body: Center(
         child: Column(
           children: [
-            RaisedButton(
-              onPressed: () {
-                Get.toNamed(ScreenPaths.home);
-              },
-              child: Text('Go to Home'),
-            ),
             RaisedButton(
               onPressed: () {
                 Get.toNamed(ScreenPaths.screenA);

@@ -11,7 +11,7 @@ class ScreenPaths {
   static const home = '/';
   static const subScreenA = '/subScreenA';
   static const subScreenB = '/subScreenB';
-  static const defaultScreen = '/DefaultScreen';
+  static const defaultScreen = '/defaultScreen';
 }
 
 class NestedNavApp extends StatelessWidget {
